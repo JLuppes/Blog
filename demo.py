@@ -21,7 +21,7 @@ class DemoForm(FlaskForm):
 
 @demo.route('/demo')
 def demoHome():
-    return render_template('demo.html')
+    return render_template('demo.html.jinja')
 
 
 @demo.route('/demo/admin')
@@ -36,7 +36,7 @@ def admin():
     for thisData in allData:
         data.append({'id': thisData.id, 'demoText': thisData.demoText, 'demoNumber': thisData.demoNumber,
                     'demoBool': thisData.demoBool, 'created': thisData.created, 'updated': thisData.updated, 'deleted': thisData.deleted})
-    return render_template('demoPages/admin.html', DemoData=DemoData, data=data, titles=titles)
+    return render_template('demoPages/admin.html.jinja', DemoData=DemoData, data=data, titles=titles)
 
 
 @demo.route('/demo/create', methods=['GET', 'POST'])
@@ -59,14 +59,14 @@ def create():
         except Exception as e:
             db.session.rollback()
             errorMsg = f"Error during database operation: {str(e)}"
-            return render_template('demoPages/create/createForm.html', error=errorMsg)
+            return render_template('demoPages/create/createForm.html.jinja', error=errorMsg)
 
         freshDemoData = DemoData.query.filter(
             DemoData.demoText == formDemoText, DemoData.demoNumber == formDemoNumber, DemoData.demoBool == formDemoBool).first()
 
-        return render_template('demoPages/create/createSuccess.html', demoData=freshDemoData)
+        return render_template('demoPages/create/createSuccess.html.jinja', demoData=freshDemoData)
 
-    return render_template('demoPages/create/createForm.html', form=form)
+    return render_template('demoPages/create/createForm.html.jinja', form=form)
 
 
 @demo.route('/demo/update', methods=['GET', 'POST'])
@@ -77,13 +77,13 @@ def update():
 
     if not dataId:
         errorMsg = "No data id provided!"
-        return render_template("demo.html", error=errorMsg)
+        return render_template("demo.html.jinja", error=errorMsg)
 
     dataToEdit = DemoData.query.filter_by(id=dataId).first()
 
     if not dataToEdit:
         errorMsg = f"No data found with id = {dataId}"
-        return render_template("demopages/admin.html", error=errorMsg)
+        return render_template("demopages/admin.html.jinja", error=errorMsg)
 
     if form.validate_on_submit():
 
@@ -102,14 +102,14 @@ def update():
             form.demoText.data = dataToEdit.demoText
             form.demoNumber.data = dataToEdit.demoNumber
             form.demoBool.data = dataToEdit.demoBool
-            return render_template('demoPages/update/updateForm.html', error=errorMsg, form=form)
+            return render_template('demoPages/update/updateForm.html.jinja', error=errorMsg, form=form)
 
     form.dataId.data = dataId
     form.demoText.data = dataToEdit.demoText
     form.demoNumber.data = dataToEdit.demoNumber
     form.demoBool.data = dataToEdit.demoBool
 
-    return render_template('demoPages/update/updateForm.html', form=form)
+    return render_template('demoPages/update/updateForm.html.jinja', form=form)
 
 
 @demo.route('/demo/delete', methods=['GET', 'POST', 'DELETE'])
@@ -122,13 +122,13 @@ def delete():
             dataId = request.args.get("dataId", '')
             if not dataId:
                 errorMsg = "No data id provided!"
-                return render_template("demo.html", error=errorMsg)
+                return render_template("demo.html.jinja", error=errorMsg)
 
         dataToDelete = DemoData.query.filter_by(id=dataId).first()
 
         if not dataToDelete:
             errorMsg = f"No data found with id = {dataId}"
-            return render_template("demopages/admin.html", error=errorMsg)
+            return render_template("demopages/admin.html.jinja", error=errorMsg)
 
         try:
             oldState = dataToDelete.deleted
@@ -140,6 +140,6 @@ def delete():
         except Exception as e:
             db.session.rollback()
             errorMsg = f"Error deleting db entry with id = {dataId}"
-            return render_template('demoPages/admin.html', error=errorMsg)
+            return render_template('demoPages/admin.html.jinja', error=errorMsg)
 
-    return render_template('demoPages/admin.html')
+    return render_template('demoPages/admin.html.jinja')

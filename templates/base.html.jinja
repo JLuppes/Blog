@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>{% block title %}Demo Flask App{% endblock %}</title>
+    <title>{% block title %}JoshSpot{% endblock %}</title>
 
     {# CSS Reset #}
     <link
@@ -22,7 +22,7 @@
     {% block extrahead %}{% endblock%}
   </head>
   <body>
-    <header>{% include 'components/navbar.html'%}</header>
+    <header>{% include 'components/navbar.html.jinja'%}</header>
 
     {% if error %}
     <p class="error">{{error}}</p>
