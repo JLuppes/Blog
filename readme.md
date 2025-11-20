@@ -1,6 +1,6 @@
-# Template App
+# Blog App
 
-This is a web app built with Flask, designed as a base template for further apps.
+This is a blog app, made with Flask.
 
 ## Running
 
