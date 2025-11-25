@@ -1,12 +1,14 @@
 from flask import Flask
 from config import Config
-from models import db
+from models import db, Post, Tag, Categorization, Comment, User, Profile, Assignment, Role
 from controllers import main
-from demo import demo
+from blog import blog
 from dotenv import dotenv_values
 import os
 from flask_bootstrap import Bootstrap5
 from flask_wtf import CSRFProtect
+from flask_admin import Admin
+from flask_admin.contrib.sqla import ModelView
 
 config = {
     **dotenv_values(".env"),  # load general variables
@@ -18,7 +20,20 @@ config = {
 app = Flask(__name__)
 csrf = CSRFProtect(app)
 
+admin = Admin(app, name='Blog Site Admin')
+admin.add_view(ModelView(Post, db.session))
+admin.add_view(ModelView(Tag, db.session))
+admin.add_view(ModelView(Categorization, db.session))
+admin.add_view(ModelView(Comment, db.session))
+admin.add_view(ModelView(User, db.session))
+admin.add_view(ModelView(Profile, db.session))
+admin.add_view(ModelView(Assignment, db.session))
+admin.add_view(ModelView(Role, db.session))
+
 app.config.from_object(Config)
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.getenv('DB_NAME', 'blog') + '.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # serve locally for faster and offline development
 app.config['BOOTSTRAP_SERVE_LOCAL'] = True
@@ -46,7 +61,7 @@ with app.app_context():
     print("Database created at:", app.config['SQLALCHEMY_DATABASE_URI'])
 
 app.register_blueprint(main)
-app.register_blueprint(demo)
+app.register_blueprint(blog)
 
 if __name__ == '__main__':
     app.run(debug=True)
