@@ -9,6 +9,7 @@ from flask_bootstrap import Bootstrap5
 from flask_wtf import CSRFProtect
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
+from flask_migrate import Migrate
 
 config = {
     **dotenv_values(".env"),  # load general variables
@@ -19,6 +20,7 @@ config = {
 
 app = Flask(__name__)
 csrf = CSRFProtect(app)
+migrate = Migrate(app, db)
 
 admin = Admin(app, name='Blog Site Admin')
 admin.add_view(ModelView(Post, db.session))
@@ -32,8 +34,8 @@ admin.add_view(ModelView(Role, db.session))
 
 app.config.from_object(Config)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.getenv('DB_NAME', 'blog') + '.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.getenv('DB_NAME', 'blog') + '.db'
+# app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # serve locally for faster and offline development
 app.config['BOOTSTRAP_SERVE_LOCAL'] = True
