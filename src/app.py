@@ -63,7 +63,6 @@ with app.app_context():
     print("Database created at:", app.config['SQLALCHEMY_DATABASE_URI'])
 
 app.register_blueprint(main)
-app.register_blueprint(blog)
 
 if __name__ == '__main__':
     app.run(debug=True)
