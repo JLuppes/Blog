@@ -1,7 +1,0 @@
-{% extends 'demo.html.jinja' %} 
-{% block crud %} 
-  {% if data %}
-    {% from 'bootstrap5/table.html' import render_table %} 
-    {{ render_table(data, titles, show_actions=True, model=DemoData, edit_url=('demo.update', [('dataId', ':id')]),delete_url=('demo.delete', [('dataId', ':id')])) }} 
-  {% endif %} 
-{% endblock %}
