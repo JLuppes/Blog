@@ -1,8 +1,12 @@
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime, timezone
 import flask_login
+from flask_admin import Admin
+from flask_admin.contrib.sqla import ModelView
+from app import app
 
 db = SQLAlchemy()
+admin = Admin(app, name='Blog Site')
 
 
 class Post(db.Model):
@@ -15,6 +19,7 @@ class Post(db.Model):
     # Relationships
     categories = db.relationship('Categorization', backref='post', lazy=True)
     posts = db.relationship('Comment', backref='post', lazy=True)
+admin.add_view(ModelView(Post, db.session))
 
 
 class Tag(db.Model):
@@ -23,12 +28,14 @@ class Tag(db.Model):
     # Relationships
     categorizations = db.relationship(
         'Categorization', backref='tag', lazy=True)
+admin.add_view(ModelView(Tag, db.session))
 
 
 class Categorization(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     post_id = db.Column(db.Integer, db.ForeignKey('post.id'))
     tag_id = db.Column(db.Integer, db.ForeignKey('tag.id'))
+admin.add_view(ModelView(Categorization, db.session))
 
 
 class Comment(db.Model):
@@ -39,6 +46,7 @@ class Comment(db.Model):
     deleted = db.Column(db.Boolean, default=False)
     created = db.Column(db.DateTime, default=datetime.now(timezone.utc))
     updated = db.Column(db.DateTime, default=datetime.now(timezone.utc))
+admin.add_view(ModelView(Comment, db.session))
 
 
 class User(db.Model, flask_login.UserMixin):
@@ -53,6 +61,7 @@ class User(db.Model, flask_login.UserMixin):
     assignments = db.relationship('Assignment', backref='user', lazy=True)
     profile = db.relationship(
         'Profile', backref='user', lazy=True, uselist=False)
+admin.add_view(ModelView(User, db.session))
 
 
 class Profile(db.Model):
@@ -64,6 +73,7 @@ class Profile(db.Model):
     deleted = db.Column(db.Boolean, default=False)
     created = db.Column(db.DateTime, default=datetime.now(timezone.utc))
     updated = db.Column(db.DateTime, default=datetime.now(timezone.utc))
+admin.add_view(ModelView(Profile, db.session))
 
 
 class Assignment(db.Model):
@@ -73,6 +83,7 @@ class Assignment(db.Model):
     updated = db.Column(db.DateTime, default=datetime.now(timezone.utc))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     role_id = db.Column(db.Integer, db.ForeignKey('role.id'))
+admin.add_view(ModelView(Assignment, db.session))
 
 
 class Role(db.Model):
@@ -81,3 +92,4 @@ class Role(db.Model):
     description = db.Column(db.String(1000))
     # Relationships
     assignments = db.relationship('Assignment', backref='role', lazy=True)
+admin.add_view(ModelView(Role, db.session))
