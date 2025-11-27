@@ -1,8 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime, timezone
 import flask_login
-
-db = SQLAlchemy()
+from src import db
 
 
 class Post(db.Model):
