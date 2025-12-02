@@ -12,6 +12,13 @@ def users_list():
     return render_template('users/userlist.html.jinja', users=user_list)
 
 
+@users.route('/profile/<int:id>')
+def user_profile(id):
+    requested_user = User.query.get_or_404(id)
+
+    return render_template('users/userprofile.html.jinja', user=requested_user)
+
+
 # route for login api/users/signin
 @users.route('/signin', methods=["GET", "POST"])
 def handle_login():

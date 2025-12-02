@@ -3,15 +3,16 @@ from src.models.models import Post, Assignment, Categorization, Comment, Profile
 
 blog = Blueprint('blog', __name__)
 
+
 @blog.route('/')
 def blog_home():
-    post_list = Post.query.all()    
-    
+    post_list = Post.query.all()
+
     return render_template('blog.html.jinja', posts=post_list)
 
 
 @blog.route('/post/<int:id>')
 def single_post(id):
-    requested_post = Post.query.get_or_404(id)  
-    
+    requested_post = Post.query.get_or_404(id)
+
     return render_template('posts/singlepost.html.jinja', post=requested_post)
