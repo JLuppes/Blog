@@ -18,6 +18,7 @@ from flask_security import (
 )
 from flask_babel import Babel
 from src.models.models import db, user_datastore
+from src.routes import api, mainNav
 
 # loading environment variables
 load_dotenv()
@@ -206,6 +207,8 @@ app.config['BOOTSTRAP_BOOTSWATCH_THEME'] = 'morph'
 bootstrap = Bootstrap5(app)
 
 
+app.register_blueprint(api, url_prefix="/api")
+app.register_blueprint(mainNav, url_prefix="/")
 
 
 
