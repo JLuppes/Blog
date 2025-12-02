@@ -1,46 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>{% block title %}JoshSpot{% endblock %}</title>
 
-    {# CSS Reset #}
-    <link
-      rel="stylesheet"
-      href="{{url_for('static', filename='styles/reset.css')}}"
-    />
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>{% block title %}JoshSpot{% endblock %}</title>
 
-    {# Bootstrap CSS #}
-    {{ bootstrap.load_css() }}
+  {# CSS Reset #}
+  <link rel="stylesheet" href="{{url_for('static', filename='styles/reset.css')}}" />
 
-    {# Custom CSS #}
-    <link
-      rel="stylesheet"
-      href="{{url_for('static', filename='styles/style.css')}}"
-    />
-    {% block extrahead %}{% endblock%}
-  </head>
-  <body>
-    <header>{% include 'components/navbar.html.jinja'%}</header>
+  {# Bootstrap CSS #}
+  {{ bootstrap.load_css() }}
 
-    {% if error %}
-    <p class="error">{{error}}</p>
-    {% endif %} 
-    
-    {% with messages = get_flashed_messages() %} 
-      {% if messages %}
-        <ul class="flashes">
-          {% for message in messages %}
-            <li>{{ message }}</li>
-          {% endfor %}
-        </ul>
-      {% endif %} 
-    {% endwith %} 
-    
-    {% block content %}{% endblock %} 
-    
-    {# Bootstrap Script #}
-    {{ bootstrap.load_js() }}
-  </body>
+  {# Custom CSS #}
+  <link rel="stylesheet" href="{{url_for('static', filename='styles/style.css')}}" />
+  {% block extrahead %}{% endblock%}
+</head>
+
+<body>
+  <header>{% include 'components/navbar.html.jinja'%}</header>
+
+  {% if error %}
+  <p class="error">{{error}}</p>
+  {% endif %}
+
+  {% with messages = get_flashed_messages() %}
+  {% if messages %}
+  <ul class="flashes">
+    {% for message in messages %}
+    <li>{{ message }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+  {% endwith %}
+
+  {% block content %}{% endblock %}
+
+  {# Bootstrap Script #}
+  {{ bootstrap.load_js() }}
+</body>
+
 </html>

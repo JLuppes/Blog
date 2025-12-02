@@ -4,4 +4,15 @@
 <h1>Blog</h1>
 
 <p>Here is the blog.</p>
+
+<ul>
+    {% if posts %}
+    {% for post in posts %}
+    <li>
+        <h3>Post #<a href="{{url_for('mainNav.blog.single_post',id=post.id)}}">{{post.id}}</a>:</h3>
+        <p>{{post.content}}</p>
+    </li>
+    {% endfor %}
+    {% endif %}
+</ul>
 {% endblock %}
