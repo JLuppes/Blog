@@ -49,4 +49,4 @@ To develop your own version of this project, you can `clone` or `fork` this repo
 ## Credits
 
 - [Flask](https://flask.palletsprojects.com/en/stable/)
-- Architecture inspo from [AshleyAlexJacob](https://github.com/AshleyAlexJacob/Flask-API-Folder-Guide-2023)
+- Architecture inspo from [AshleyAlexJacob](https://ashleyalexjacob.medium.com/flask-api-folder-guide-2023-6fd56fe38c00)
