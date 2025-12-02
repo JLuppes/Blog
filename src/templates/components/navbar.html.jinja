@@ -12,6 +12,12 @@
       {{ render_nav_item('mainNav.blog.blog_home', 'Blog') }}
       {{ render_nav_item('mainNav.users.users_list', 'Users') }}
       {{ render_nav_item('admin.index', 'Admin') }}
+      {% if False %}
+      <p>Hello. Log Out.</p>
+      {% else %}
+      {{ render_nav_item('mainNav.users.login_page', 'Log In') }}
+      {{ render_nav_item('mainNav.users.register', 'Register') }}
+      {% endif %}
     </div>
   </div>
 </div>

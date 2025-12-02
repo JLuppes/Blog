@@ -19,7 +19,22 @@ def user_profile(id):
     return render_template('users/userprofile.html.jinja', user=requested_user)
 
 
+@users.route('/login')
+def login_page():
+    user_list = User.query.all()
+
+    return render_template('users/login.html.jinja', users=user_list)
+
+
+@users.route('/register')
+def register():
+    user_list = User.query.all()
+
+    return render_template('users/register.html.jinja', users=user_list)
+
 # route for login api/users/signin
+
+
 @users.route('/signin', methods=["GET", "POST"])
 def handle_login():
     return Response(
