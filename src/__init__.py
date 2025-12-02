@@ -1,9 +1,9 @@
-from flask import Flask
 import os
-from src.config.config import Config
+from datetime import datetime, timezone
 from dotenv import load_dotenv
-from flask_sqlalchemy import SQLAlchemy
+from flask import Flask, abort, current_app, jsonify, session
 from flask_migrate import Migrate
+from flask_babel import Babel
 from flask_bcrypt import Bcrypt
 from flask_bootstrap import Bootstrap5
 from flask_wtf import CSRFProtect
@@ -15,10 +15,12 @@ from flask_security import (
     SmsSenderBaseClass,
     uia_phone_mapper,
     uia_email_mapper,
+    auth_required,
 )
-from flask_babel import Babel
+from src.config.config import Config
 from src.models.models import db, user_datastore
 from src.routes import api, mainNav
+from src.models.models import Post, Assignment, Categorization, Comment, Profile, Role, Tag, User
 
 # loading environment variables
 load_dotenv()
@@ -58,14 +60,10 @@ class SmsCaptureSender(SmsSenderBaseClass):
         return None
 
 
-
-
-
 # declaring flask application
 app = Flask(__name__)
 
 csrf = CSRFProtect(app)
-
 
 # calling the dev configuration
 config = Config().dev_config
@@ -92,7 +90,6 @@ app.config["SECURITY_TOTP_SECRETS"] = {
     "1": "TjQ9Qa31VOrfEzuPy4VHQWPCTmRzCnFzMKLxXYiZu9B"
 }
 app.config['SECURITY_TOTP_ISSUER'] = os.environ.get("APP_NAME")
-
 
 # These need to be defined to handle redirects
 # As defined in the API documentation - they will receive the relevant context
@@ -143,12 +140,14 @@ for opt in [
 if os.environ.get("SETTINGS"):
     # Load settings from a file pointed to by SETTINGS
     app.config.from_envvar("SETTINGS")
-    
+
 # Path for our local sql lite database
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("SQLALCHEMY_DATABASE_URI_DEV")
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
+    "SQLALCHEMY_DATABASE_URI_DEV")
 
 # To specify to track modifications of objects and emit signals
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = os.environ.get("SQLALCHEMY_TRACK_MODIFICATIONS")
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = os.environ.get(
+    "SQLALCHEMY_TRACK_MODIFICATIONS")
 
 # Initialize standard Flask extensions
 CaptureMail(app)
@@ -161,21 +160,8 @@ app.security = Security(app, user_datastore)
 
 bcrypt = Bcrypt(app)
 
-
-# sql alchemy instance
-# db = SQLAlchemy(app)
-
-
 # Flask Migrate instance to handle migrations
 migrate = Migrate(app, db)
-
-# import api blueprint to register it with app
-# from src.routes import api, mainNav
-# app.register_blueprint(api, url_prefix="/api")
-# app.register_blueprint(mainNav, url_prefix="/")
-
-# import models to let the migrate tool know
-from src.models.models import Post, Assignment, Categorization, Comment, Profile, Role, Tag, User
 
 # Flask_Admin Setup
 admin = Admin(app, name='Blog Site Admin')
@@ -251,9 +237,6 @@ app.register_blueprint(api, url_prefix="/api")
 app.register_blueprint(mainNav, url_prefix="/")
 
 
-
-
-
 # from flask import Flask
 # import routes
 # from src import db, Post, Tag, Categorization, Comment, User, Profile, Assignment, Role, main
@@ -322,5 +305,3 @@ app.register_blueprint(mainNav, url_prefix="/")
 
 # if __name__ == '__main__':
 #     app.run(debug=True)
-
-
