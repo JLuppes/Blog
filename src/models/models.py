@@ -1,7 +1,17 @@
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime, timezone
 import flask_login
-from src import db
+# from src import db
+from flask_security.models import fsqla_v2 as fsqla
+from flask_security import SQLAlchemyUserDatastore
+from flask_sqlalchemy import SQLAlchemy
+
+
+# Create database connection object
+db = SQLAlchemy()
+
+# Define models
+fsqla.FsModels.set_db_info(db)
 
 
 class Post(db.Model):
@@ -40,7 +50,7 @@ class Comment(db.Model):
     updated = db.Column(db.DateTime, default=datetime.now(timezone.utc))
 
 
-class User(db.Model, flask_login.UserMixin):
+class User(db.Model, fsqla.FsUserMixin):
     id = db.Column(db.Integer, primary_key=True)
     password = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(100))
@@ -52,6 +62,7 @@ class User(db.Model, flask_login.UserMixin):
     assignments = db.relationship('Assignment', backref='user', lazy=True)
     profile = db.relationship(
         'Profile', backref='user', lazy=True, uselist=False)
+    us_phone_number = db.Column(db.String(128), unique=True, nullable=True)
 
 
 class Profile(db.Model):
@@ -74,9 +85,13 @@ class Assignment(db.Model):
     role_id = db.Column(db.Integer, db.ForeignKey('role.id'))
 
 
-class Role(db.Model):
+class Role(db.Model, fsqla.FsRoleMixin):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
     description = db.Column(db.String(1000))
     # Relationships
     assignments = db.relationship('Assignment', backref='role', lazy=True)
+
+
+# Setup Flask-Security
+user_datastore = SQLAlchemyUserDatastore(db, User, Role)
