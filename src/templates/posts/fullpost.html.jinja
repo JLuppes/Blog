@@ -1,7 +1,5 @@
-<h1>Blog Post</h1>
-
-<p>Here is one blog post.</p>
-
 <h3>Post #{{post.id}}:</h3>
 <p>{{post.content}}</p>
 <h4> Posted by: <a href="{{url_for('mainNav.users.user_profile',id=post.user.id)}}">{{post.user.display_name}}</a></h4>
+
+{% include 'comments/comment_section.html.jinja' %}
