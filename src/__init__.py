@@ -9,6 +9,7 @@ from flask_bootstrap import Bootstrap5
 from flask_wtf import CSRFProtect
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
+from flask_login import LoginManager
 from flask_security import (
     Security,
     SmsSenderFactory,
@@ -16,11 +17,14 @@ from flask_security import (
     uia_phone_mapper,
     uia_email_mapper,
     auth_required,
+    RegisterFormV2,
 )
 from src.config.config import Config
 from src.models.models import db, user_datastore
 from src.routes import api, mainNav
 from src.models.models import Post, Assignment, Categorization, Comment, Profile, Role, Tag, User
+from wtforms import StringField, TelField
+from wtforms.validators import DataRequired
 
 # loading environment variables
 load_dotenv()
@@ -155,13 +159,30 @@ Babel(app)
 # Enable CSRF on all api endpoints.
 CSRFProtect(app)
 db.init_app(app)
+
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = "login"
+
+# Load user for Flask-Login
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
+class ExtendedRegisterForm(RegisterFormV2):
+    display_name = StringField('Display Name', [DataRequired()])
+    us_phone_number = TelField('Phone Number', [DataRequired()])
+
 # Setup Flask-Security
-app.security = Security(app, user_datastore)
+app.security = Security(app, user_datastore, register_form=ExtendedRegisterForm)
 
 bcrypt = Bcrypt(app)
 
 # Flask Migrate instance to handle migrations
 migrate = Migrate(app, db)
+
+
+
 
 # Flask_Admin Setup
 admin = Admin(app, name='Blog Site Admin')

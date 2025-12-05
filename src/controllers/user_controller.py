@@ -132,14 +132,14 @@ def user_profile_by_name(name):
     return render_template('users/userprofile.html.jinja', user=requested_user)
 
 
-@users.route('/login')
-def login_page():
-    return render_template('users/login.html.jinja')
+# @users.route('/login')
+# def login_page():
+#     return render_template('users/login.html.jinja')
 
 
-@users.route('/register')
-def register():
-    return render_template('users/register.html.jinja')
+# @users.route('/register')
+# def register():
+#     return render_template('users/register.html.jinja')
 
 
 @users.route('/signin', methods=["GET", "POST"])

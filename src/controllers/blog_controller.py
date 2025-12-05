@@ -18,15 +18,11 @@ def single_post(id):
     return render_template('posts/singlepost.html.jinja', post=requested_post)
 
 
-
 @blog.route('/post/new', methods=['GET', 'POST'])
 def new_post():
     if request.method == 'POST':
         newpost = Post()
         user = request.form.get('userID')
         content = request.form.get('content')
-        
-        
-        
-        
+
     return render_template('posts/newpost.html.jinja')

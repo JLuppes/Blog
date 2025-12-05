@@ -12,9 +12,9 @@
       {{ render_nav_item('mainNav.blog.blog_home', 'Blog') }}
       {{ render_nav_item('mainNav.users.users_list', 'Users') }}
       {{ render_nav_item('admin.index', 'Admin') }}
-      {% if True %}
+      {% if current_user.is_authenticated %}
       <div class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">UserName</a>
+        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">{{current_user.display_name}}</a>
         <ul class="dropdown-menu">
           <li>
             <a class="dropdown-item" href="{{ url_for('mainNav.users.user_profile',id=1) }}">Profile</a>
@@ -23,13 +23,13 @@
             <a class="dropdown-item" href="{{ url_for('mainNav.main.index') }}">Posts</a>
           </li>
           <li>
-            <a class="dropdown-item" href="{{ url_for('mainNav.main.index') }}">Logout</a>
+            <a class="dropdown-item" href="{{ url_for('security.logout') }}">Logout</a>
           </li>
         </ul>
       </div>
       {% else %}
-      {{ render_nav_item('mainNav.users.login_page', 'Log In') }}
-      {{ render_nav_item('mainNav.users.register', 'Register') }}
+      {{ render_nav_item('security.login', 'Log In') }}
+      {{ render_nav_item('security.register', 'Register') }}
       {% endif %}
     </div>
   </div>
