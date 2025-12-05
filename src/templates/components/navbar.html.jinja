@@ -1,6 +1,5 @@
 {% from 'bootstrap5/nav.html' import render_nav_item %}
 
-
 <div class="px-3 py-2 text-bg-dark border-bottom">
   <div class="container">
     <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
@@ -14,13 +13,17 @@
       {{ render_nav_item('admin.index', 'Admin') }}
       {% if current_user.is_authenticated %}
       <div class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">{{current_user.display_name}}</a>
+        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown"
+          aria-expanded="false">{{current_user.display_name}}</a>
         <ul class="dropdown-menu">
+          <li>
+            <a class="dropdown-item" href="{{url_for('mainNav.blog.new_post')}}">New Post</a>
+          </li>
           <li>
             <a class="dropdown-item" href="{{ url_for('mainNav.users.user_profile',id=1) }}">Profile</a>
           </li>
           <li>
-            <a class="dropdown-item" href="{{ url_for('mainNav.main.index') }}">Posts</a>
+            <a class="dropdown-item" href="{{ url_for('mainNav.main.index') }}">My Posts</a>
           </li>
           <li>
             <a class="dropdown-item" href="{{ url_for('security.logout') }}">Logout</a>

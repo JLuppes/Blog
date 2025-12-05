@@ -5,10 +5,11 @@ import flask_login
 from flask_security.models import fsqla_v2 as fsqla
 from flask_security import SQLAlchemyUserDatastore
 from flask_sqlalchemy import SQLAlchemy
+from src.services.database import db
 
 
 # Create database connection object
-db = SQLAlchemy()
+# db = SQLAlchemy()
 
 # Define models
 fsqla.FsModels.set_db_info(db)

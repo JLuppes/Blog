@@ -4,9 +4,10 @@
 <h2>New Post</h2>
 
 
-<form>
-<input type="text">
-<button type="submit">Submit</button>
+<form method="post">
+    {{form.user_id(value=current_user.id)}}
+    {{form.post_content}}
+    <button type="submit">Submit</button>
 
 </form>
 {% endblock %}

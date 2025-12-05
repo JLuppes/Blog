@@ -1,5 +1,9 @@
 from flask import Blueprint, render_template, request, redirect, url_for
 from src.models.models import Post, Assignment, Categorization, Comment, Profile, Role, Tag, User
+from flask_wtf import FlaskForm
+from wtforms import StringField, validators, widgets, TextAreaField, HiddenField
+from flask_login import login_required
+from src.services.database import db
 
 blog = Blueprint('blog', __name__)
 
@@ -18,11 +22,40 @@ def single_post(id):
     return render_template('posts/singlepost.html.jinja', post=requested_post)
 
 
-@blog.route('/post/new', methods=['GET', 'POST'])
-def new_post():
-    if request.method == 'POST':
-        newpost = Post()
-        user = request.form.get('userID')
-        content = request.form.get('content')
+class BlogPostForm(FlaskForm):
+    post_content = TextAreaField('Post Content', render_kw={
+                                 "rows": 10, "cols": 80})
+    user_id = HiddenField()
 
-    return render_template('posts/newpost.html.jinja')
+
+@blog.route('/post/new', methods=['GET', 'POST'])
+@login_required
+def new_post():
+    # if request.method == 'POST':
+    #     newpost = Post()
+    #     user = request.form.get('userID')
+    #     content = request.form.get('content')
+
+    form = BlogPostForm()
+    if request.method == 'POST':
+
+        print("Form submitted!")
+        print("User ID: " + request.form.get("user_id"))
+
+        try:
+
+            new_post = Post(
+                user_id=request.form.get("user_id"),
+                content=request.form.get("post_content")
+            )
+
+            db.session.add(new_post)
+            db.session.commit()
+
+        except Exception as e:
+            error = "Error adding new post."
+            return render_template('posts/newpost.html.jinja', form=form, error=error)
+
+        return redirect(url_for('mainNav.blog.blog_home'))
+
+    return render_template('posts/newpost.html.jinja', form=form)

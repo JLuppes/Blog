@@ -165,23 +165,26 @@ login_manager.init_app(app)
 login_manager.login_view = "login"
 
 # Load user for Flask-Login
+
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
+
 
 class ExtendedRegisterForm(RegisterFormV2):
     display_name = StringField('Display Name', [DataRequired()])
     us_phone_number = TelField('Phone Number', [DataRequired()])
 
+
 # Setup Flask-Security
-app.security = Security(app, user_datastore, register_form=ExtendedRegisterForm)
+app.security = Security(app, user_datastore,
+                        register_form=ExtendedRegisterForm)
 
 bcrypt = Bcrypt(app)
 
 # Flask Migrate instance to handle migrations
 migrate = Migrate(app, db)
-
-
 
 
 # Flask_Admin Setup
