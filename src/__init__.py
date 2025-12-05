@@ -1,7 +1,7 @@
 import os
 from datetime import datetime, timezone
 from dotenv import load_dotenv
-from flask import Flask, abort, current_app, jsonify, session
+from flask import Flask, abort, current_app, jsonify, session, send_from_directory
 from flask_migrate import Migrate
 from flask_babel import Babel
 from flask_bcrypt import Bcrypt
@@ -231,6 +231,12 @@ def resetfresh():
     session["fs_paa"] = old_paa
     session.pop("fs_gexp", None)
     return jsonify()
+
+
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory(os.path.join(app.root_path, 'static'),
+                               'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
 
 app.register_blueprint(api, url_prefix="/api")
