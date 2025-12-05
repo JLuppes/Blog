@@ -1,5 +1,6 @@
 {% from 'bootstrap5/nav.html' import render_nav_item %}
 
+
 <div class="px-3 py-2 text-bg-dark border-bottom">
   <div class="container">
     <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
@@ -7,13 +8,25 @@
         class="d-flex align-items-center my-2 my-lg-0 me-lg-auto text-white text-decoration-none" id="navbar-logo">
         <img id="logo_svg" src="{{url_for('static', filename='logo.svg')}}" />
       </a>
-
       {{ render_nav_item('mainNav.main.index', 'Home') }}
       {{ render_nav_item('mainNav.blog.blog_home', 'Blog') }}
       {{ render_nav_item('mainNav.users.users_list', 'Users') }}
       {{ render_nav_item('admin.index', 'Admin') }}
-      {% if False %}
-      <p>Hello. Log Out.</p>
+      {% if True %}
+      <div class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">UserName</a>
+        <ul class="dropdown-menu">
+          <li>
+            <a class="dropdown-item" href="{{ url_for('mainNav.users.user_profile',id=1) }}">Profile</a>
+          </li>
+          <li>
+            <a class="dropdown-item" href="{{ url_for('mainNav.main.index') }}">Posts</a>
+          </li>
+          <li>
+            <a class="dropdown-item" href="{{ url_for('mainNav.main.index') }}">Logout</a>
+          </li>
+        </ul>
+      </div>
       {% else %}
       {{ render_nav_item('mainNav.users.login_page', 'Log In') }}
       {{ render_nav_item('mainNav.users.register', 'Register') }}
